@@ -8,3 +8,18 @@ body,
 html {
   height: 100%;
 }
+
+.legend {
+  background-color: floralwhite;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+}
+
+.legend-text {
+  margin-left: 5px;
+}
