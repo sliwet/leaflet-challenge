@@ -4,15 +4,15 @@ let magToRadius = mag => mag * 20000;
 let magToColor = magnitude => {
     let a = 1.0;
     if (magnitude < 1) {
-        return `rgba(0,255,0,${a})`
+        return `rgba(200,255,0,${a})`
     } else if (magnitude < 2) {
-        return `rgba(51,204,0,${a})`
+        return `rgba(211,204,0,${a})`
     } else if (magnitude < 3) {
-        return `rgba(102,153,0,${a})`
+        return `rgba(222,153,0,${a})`
     } else if (magnitude < 4) {
-        return `rgba(153,102,0,${a})`
+        return `rgba(233,102,0,${a})`
     } else if (magnitude < 5) {
-        return `rgba(204,51,0,${a})`
+        return `rgba(244,51,0,${a})`
     } else {
         return `rgba(255,0,0,${a})`
     }
