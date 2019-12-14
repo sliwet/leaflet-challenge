@@ -62,47 +62,32 @@ let getEarthquakes = earthquakeData => {
     return L.layerGroup(cmarkers);
 }
 
+let getMap = maptype => {
+    let onemap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+        maxZoom: 18,
+        id: maptype,
+        accessToken: API_KEY
+    });
+    return onemap;
+}
+
 let createMap = layerList => {
-    let earthquakes = layerList.earthquakes;
-    let faultlines = layerList.faultlines;
-    let maxzoom = 18;
-    
-    let satellitemap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-        maxZoom: maxzoom,
-        id: "mapbox.satellite",
-        accessToken: API_KEY
-    });
-
-    let grayscalemap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-        maxZoom: maxzoom,
-        id: "mapbox.light",
-        accessToken: API_KEY
-    });
-
-    let outdoormap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-        maxZoom: maxzoom,
-        id: "mapbox.outdoors",
-        accessToken: API_KEY
-    });
-
     let baseMaps = {
-        "Satellite": satellitemap,
-        "Grayscale": grayscalemap,
-        "Outdoors":outdoormap
+        "Satellite": getMap("mapbox.satellite"),
+        "Grayscale": getMap("mapbox.light"),
+        "Outdoors":getMap("mapbox.outdoors")
     };
 
     let overlayMaps = {
-        "Fault Lines": faultlines,
-        Earthquakes: earthquakes
+        "Fault Lines": layerList.faultlines,
+        Earthquakes: layerList.earthquakes
     };
 
     let myMap = L.map("map", {
         center: [40, -100],
         zoom: 5,
-        layers: [satellitemap,faultlines, earthquakes]
+        layers: [baseMaps.Satellite,overlayMaps["Fault Lines"], overlayMaps.Earthquakes]
     });
 
     L.control.layers(baseMaps, overlayMaps, {
